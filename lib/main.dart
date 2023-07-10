@@ -25,26 +25,41 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Laravel Forge',
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color.fromARGB(255, 24, 182, 155)),
-          useMaterial3: true,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Color.fromARGB(255, 24, 182, 155),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 24, 182, 155)),
+        useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color.fromARGB(255, 24, 182, 155),
+          foregroundColor: Colors.white,
+        ),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 243, 244, 246),
+        cardTheme: const CardTheme(
+            elevation: 0,
+            surfaceTintColor: Colors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0)))),
+        textTheme: GoogleFonts.figtreeTextTheme(
+          Theme.of(context)
+              .textTheme
+              .apply(bodyColor: const Color.fromARGB(255, 107, 114, 128)),
+        ),
+        iconTheme:
+            const IconThemeData(color: Color.fromARGB(255, 107, 114, 128)),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            backgroundColor: const Color.fromARGB(255, 24, 182, 155),
             foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
           ),
-          scaffoldBackgroundColor: const Color.fromARGB(255, 243, 244, 246),
-          cardTheme: const CardTheme(
-              elevation: 0,
-              surfaceTintColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)))),
-          textTheme: GoogleFonts.figtreeTextTheme(
-            Theme.of(context)
-                .textTheme
-                .apply(bodyColor: const Color.fromARGB(255, 107, 114, 128)),
-          ),
-          iconTheme:
-              const IconThemeData(color: Color.fromARGB(255, 107, 114, 128))),
+        ),
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          backgroundColor: Color.fromARGB(255, 24, 182, 155),
+          foregroundColor: Colors.white,
+        ),
+      ),
       home: hasToken ? const ServersOverviewScreen() : const LoginScreen(),
     );
   }

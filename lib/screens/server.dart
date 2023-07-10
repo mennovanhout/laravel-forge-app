@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:laravel_forge/http.dart';
 import 'package:laravel_forge/models/server.dart';
 import 'package:laravel_forge/models/site.dart';
+import 'package:laravel_forge/screens/site.dart';
 import 'package:unicons/unicons.dart';
 
 class ServerScreen extends StatefulWidget {
@@ -37,6 +38,11 @@ class _ServerScreenState extends State<ServerScreen> {
     });
   }
 
+  void _openSite(Site site) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => SiteScreen(widget.server, site)));
+  }
+
   List<Widget> subInfo(Site site) {
     List<Widget> items = [];
 
@@ -59,17 +65,23 @@ class _ServerScreenState extends State<ServerScreen> {
     }
 
     if (site.repository != null) {
-      items.add(Row(
-        children: [
-          const Icon(
-            UniconsLine.github,
-            size: 20,
-          ),
-          Text(
-            '${site.repository!}:${site.repositoryBranch!}',
-            overflow: TextOverflow.ellipsis,
-          )
-        ],
+      items.add(Expanded(
+        child: Row(
+          children: [
+            const Icon(
+              UniconsLine.github,
+              size: 20,
+            ),
+            Expanded(
+              child: Text(
+                '${site.repository!}:${site.repositoryBranch!}',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                softWrap: false,
+              ),
+            ),
+          ],
+        ),
       ));
 
       items.add(const SizedBox(width: 5));
@@ -83,25 +95,36 @@ class _ServerScreenState extends State<ServerScreen> {
     Widget body = const Center(child: CircularProgressIndicator());
 
     if (_sites != null) {
-      body = ListView.builder(
-          itemBuilder: (context, index) => Card(
-                margin: const EdgeInsets.only(left: 20, right: 20, top: 20),
+      body = GridView.extent(
+          padding: const EdgeInsets.all(10),
+          maxCrossAxisExtent: 400,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 3,
+          children: [
+            for (var site in _sites!)
+              Card(
                 child: InkWell(
                   borderRadius: BorderRadius.circular(8),
-                  onTap: () {},
+                  onTap: () {
+                    _openSite(site);
+                  },
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(_sites![index].name),
-                        subInfo(_sites![index]).isNotEmpty
+                        Text(
+                          site.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subInfo(site).isNotEmpty
                             ? const SizedBox(height: 5)
                             : Container(),
                         Row(
                           children: [
-                            for (var item in subInfo(_sites![index]))
-                              Container(child: item),
+                            for (var item in subInfo(site)) item,
                           ],
                         ),
                       ],
@@ -109,7 +132,7 @@ class _ServerScreenState extends State<ServerScreen> {
                   ),
                 ),
               ),
-          itemCount: _sites!.length);
+          ]);
     }
 
     return Scaffold(
