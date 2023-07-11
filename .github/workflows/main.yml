@@ -56,5 +56,5 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: release-linux
-          path: build/linux/release/bundle/laravel_forge/
+          path: build/linux/x64/release/bundle/
     
